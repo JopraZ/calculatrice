@@ -1,5 +1,5 @@
 const display = document.getElementById("display");
-const button = document.querySelectorAll ("btn");
+const buttons = document.querySelectorAll (".btn");
 
 let currentInput = "0";
 let previousInput = "";
@@ -8,12 +8,69 @@ let shouldResetDisplay = false;
 
 display.value = currentInput;
 
-button.forEach(button => {
+buttons.forEach(button => {
     button.addEventListener("click" ,() => {
-        const value = button.getAttribute(`data-value`);
+        const value = button.getAttribute("data-value");
         handleButtonClick(value);
     });
 });
+
+function updateDisplay() {
+    display.value = currentInput;
+    console.log("Affichage misa à jour" , currentInput);
+    
+}
+
+function isNumber(value) {
+    return /^\d$/.test(value);
+}
+
+function isOperator(value) {
+    return ["+" , "-" , "*" , "/"].includes(value);
+}
+
+function handleEqual() {
+    console.log("calcul demandé");
+}
+
+function handleClear() {
+    currentInput = "0";
+    previousInput = "";
+    operator = null;
+    shouldResetDisplay = false;
+    updateDisplay();
+}
+
+function handleClearEntry() {
+    currentInput = "0";
+    updateDisplay();
+}
+
+function handleBackspace() {
+    if (currentInput.length > 1) {
+        currentInput = currentInput.slice(0, -1);
+    } else {
+        currentInput ="0";
+    }
+    updateDisplay();
+}
+
+function handleDecimal() {
+    if (shouldResetDisplay) {
+        currentInput = "0.";
+        shouldResetDisplay = false;
+    } else if (! currentInput.includes(".")) {
+        currentInput += ".";
+        }
+    updateDisplay();
+
+}
+
+function handleOperator(op) {
+    previousInput = currentInput;
+    operator = op;
+    shouldResetDisplay = true;
+}
 
 function handleButtonClick(value) {
     console.log('bouton cliqué',value);
@@ -42,10 +99,12 @@ function handleNumber(number) {
         currentInput="";
         shouldResetDisplay = false;
     }
-    
+
     if (currentInput === "0") {
         currentInput = number;
     } else {
         currentInput += number;
     }
+
+    updateDisplay();
 }
