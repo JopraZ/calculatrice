@@ -17,7 +17,7 @@ buttons.forEach(button => {
 
 function updateDisplay() {
     display.value = currentInput;
-    console.log("Affichage misa à jour" , currentInput);
+    console.log("Affichage mise à jour" , currentInput);
     
 }
 
@@ -30,6 +30,49 @@ function isOperator(value) {
 }
 
 function handleEqual() {
+    if (operator === null || shouldResetDisplay) {
+        return;
+    }
+
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+
+    if ( isNaN(prev) || isNaN(current)) {
+        alert("Erreur : chiffres invalides");
+        return;
+    } 
+
+    let result;
+
+    switch (operator) {
+        case "+":
+            result = prev + current;
+            break;
+        case "-":
+            result = prev - current;
+            break;
+        case "*":
+            result = prev * current;
+            break;
+        case "/":
+            if (current === 0) {
+                alert("Erreur : Division par zéro !");
+                handleClear();
+                return;
+            }
+            result = prev / current;
+            break;
+        default: 
+            return;
+    }
+
+    currentInput = result.toString();
+    operator = null;
+    previousInput ="";
+    shouldResetDisplay = true;
+
+    updateDisplay();
+
     console.log("calcul demandé");
 }
 
